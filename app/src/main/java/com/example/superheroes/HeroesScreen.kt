@@ -3,12 +3,18 @@ package com.example.superheroes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
@@ -41,12 +47,13 @@ fun SuperheroListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(74.dp),
+                .sizeIn(minHeight = 72.dp)
+                .padding(16.dp),
 
             verticalAlignment = Alignment.CenterVertically
         ) {
-            HeroInformation(superhero.nameRes, superhero.descriptionRes, Modifier.padding(16.dp))
-            Spacer(modifier = Modifier.weight(1F))
+            HeroInformation(superhero.nameRes, superhero.descriptionRes, Modifier.weight(1f))
+            Spacer(Modifier.width(16.dp))
             HeroImage(superhero.imageRes)
         }
     }
@@ -59,7 +66,10 @@ fun HeroInformation(
     modifier: Modifier = Modifier
 )
 {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+    )
+    {
         Text(
             text = stringResource(heroName),
             style = MaterialTheme.typography.displaySmall
@@ -76,20 +86,41 @@ fun HeroImage(
     modifier: Modifier = Modifier
 )
 {
-    Image(
-        painter = painterResource(heroImage),
-        contentDescription = null,
+    Box(
         modifier = modifier
-            .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
+            .height(72.dp)
             .clip(MaterialTheme.shapes.small)
-    )
-}
 
+
+    )
+    {
+        Image(
+            painter = painterResource(heroImage),
+            contentDescription = null,
+            modifier = modifier
+
+        )
+    }
+}
+@Composable
+fun SuperheroesList(
+    modifier: Modifier = Modifier
+)
+{
+    LazyColumn {
+        items(HeroesRepository.heroes){
+            SuperheroListItem(it, Modifier.padding(top = 8.dp,
+                bottom = 8.dp,
+                start = 16.dp,
+                end = 16.dp))
+        }
+    }
+}
 @Preview(showSystemUi = false)
 @Composable
 fun SuperheroesAppPreview()
 {
     SuperheroesTheme {
-        SuperheroListItem(HeroesRepository.heroes[0])
+        SuperheroesList()
     }
 }
