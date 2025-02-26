@@ -5,14 +5,19 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,16 +33,20 @@ fun SuperheroListItem(
 )
 {
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .clip(MaterialTheme.shapes.medium),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp)
     ){
         Row(
             modifier = Modifier
-                .height(72.dp)
-                .padding(16.dp)
+                .fillMaxWidth()
+                .height(74.dp),
+
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            HeroInformation(superhero.nameRes, superhero.descriptionRes)
+            HeroInformation(superhero.nameRes, superhero.descriptionRes, Modifier.padding(16.dp))
+            Spacer(modifier = Modifier.weight(1F))
             HeroImage(superhero.imageRes)
         }
     }
@@ -50,12 +59,14 @@ fun HeroInformation(
     modifier: Modifier = Modifier
 )
 {
-    Column {
+    Column(modifier = modifier) {
         Text(
-            text = stringResource(heroName)
+            text = stringResource(heroName),
+            style = MaterialTheme.typography.displaySmall
         )
         Text(
-            text = stringResource(heroDescription)
+            text = stringResource(heroDescription),
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
@@ -67,11 +78,14 @@ fun HeroImage(
 {
     Image(
         painter = painterResource(heroImage),
-        contentDescription = null
+        contentDescription = null,
+        modifier = modifier
+            .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
+            .clip(MaterialTheme.shapes.small)
     )
 }
 
-@Preview
+@Preview(showSystemUi = false)
 @Composable
 fun SuperheroesAppPreview()
 {
